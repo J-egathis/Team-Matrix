@@ -1,0 +1,1579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Work Status — Premium Enterprise Workspaces</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- AOS CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/css/style.css?v=1.1">
+</head>
+<body>
+
+  <!-- TOAST NOTIFICATIONS CONTAINER -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- INITIAL LOADING SCREEN -->
+  <div id="app-loader" class="app-loader">
+    <div class="loader-ripple">
+      <div></div>
+      <div></div>
+    </div>
+    <p>Initializing Workspace...</p>
+  </div>
+
+  <!-- LOGIN PAGE -->
+  <div id="login-page" class="login-page hidden">
+    <div class="login-bg-dots"></div>
+    <div class="login-container" data-aos="fade-up" data-aos-duration="800">
+      <div class="login-header">
+        <div class="logo-box">
+          <div class="logo-orb"></div>
+          <i class="fa-solid fa-layer-group logo-icon"></i>
+        </div>
+        <h1>team matrix</h1>
+        <p>Premium SaaS dashboard for enterprise management</p>
+      </div>
+
+      <form id="login-form" class="login-form">
+        <div class="input-group">
+          <label for="login-email">Email Address</label>
+          <div class="input-wrapper">
+            <i class="fa-regular fa-envelope input-prefix"></i>
+            <input type="email" id="login-email" required placeholder="name@company.com">
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="login-password">Password</label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-lock input-prefix"></i>
+            <input type="password" id="login-password" required placeholder="••••••••">
+          </div>
+        </div>
+
+        <div class="login-options">
+          <label class="checkbox-container">
+            <input type="checkbox" id="remember-me">
+            <span class="checkmark"></span>
+            Remember Me
+          </label>
+          <a href="#" class="forgot-pass" id="forgot-password-trigger">Forgot Password?</a>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block" id="btn-login-submit">
+          <span class="btn-text">Sign In to Workspace</span>
+          <div class="btn-loader hidden"></div>
+        </button>
+      </form>
+
+      <div class="login-footer">
+        <p>Demo Accounts (Password: <strong>Password123</strong>):</p>
+        <div class="demo-accounts">
+          <button class="btn-demo-badge" data-email="mainadmin@workstatus.com">Super Admin (sushek)</button>
+          <button class="btn-demo-badge" data-email="admin1@workstatus.com">Admin 1 (vinoth)</button>
+          <button class="btn-demo-badge" data-email="admin2@workstatus.com">Admin 2 (stafy)</button>
+          <button class="btn-demo-badge" data-email="employee1@workstatus.com">Emp 1 (sivanesan)</button>
+          <button class="btn-demo-badge" data-email="employee4@workstatus.com">Emp 4 (jayavarni)</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- APPLICATION SHELL (DASHBOARDS) -->
+  <div id="app-shell" class="app-shell hidden">
+    
+    <!-- SIDEBAR -->
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo-box-small">
+          <div class="logo-orb-small"></div>
+          <i class="fa-solid fa-layer-group logo-icon-small"></i>
+        </div>
+        <span class="brand-text">team matrix</span>
+        <button id="sidebar-toggle-btn" class="sidebar-toggle-btn">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+      </div>
+
+      <div class="user-profile-summary">
+        <div class="avatar-container">
+          <img id="sidebar-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" alt="Profile" class="user-avatar-img">
+          <div class="online-indicator"></div>
+        </div>
+        <div class="user-info-text">
+          <h4 id="sidebar-user-name">Alex Johnson</h4>
+          <p id="sidebar-user-role">Lead Engineer</p>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <!-- Dashboard / Main view -->
+        <a href="#dashboard" class="nav-item active" data-view="dashboard">
+          <i class="fa-solid fa-chart-line"></i>
+          <span>Dashboard</span>
+          <span class="nav-dot hidden" id="dot-dashboard"></span>
+        </a>
+        <!-- Tasks Management (Unified) -->
+        <a href="#tasks" class="nav-item" data-view="tasks">
+          <i class="fa-solid fa-list-check"></i>
+          <span>Task Board</span>
+          <span class="nav-dot hidden" id="dot-tasks"></span>
+        </a>
+        <!-- Attendance tracking -->
+        <a href="#attendance" class="nav-item" data-view="attendance">
+          <i class="fa-solid fa-calendar-check"></i>
+          <span>Attendance</span>
+          <span class="nav-dot hidden" id="dot-attendance"></span>
+        </a>
+        <!-- Leave tracking -->
+        <a href="#leaves" class="nav-item" data-view="leaves">
+          <i class="fa-solid fa-envelope-open-text"></i>
+          <span>Leave Requests</span>
+          <span class="nav-dot hidden" id="dot-leaves"></span>
+        </a>
+        <!-- Expense tracking -->
+        <a href="#expenses" class="nav-item" data-view="expenses">
+          <i class="fa-solid fa-wallet"></i>
+          <span>Add Expense</span>
+          <span class="nav-dot hidden" id="dot-expenses"></span>
+        </a>
+        <!-- Reports (Admin/Superadmin only) -->
+        <a href="#reports" class="nav-item admin-only main-admin-only" data-view="reports">
+          <i class="fa-solid fa-file-invoice-dollar"></i>
+          <span>Reports & Analytics</span>
+        </a>
+        <!-- System Directory (Main Admin only) -->
+        <a href="#directory" class="nav-item main-admin-only" data-view="directory">
+          <i class="fa-solid fa-users-gear"></i>
+          <span>Workspace Setup</span>
+          <span class="nav-dot hidden" id="dot-directory"></span>
+        </a>
+        <!-- Profile & Settings -->
+        <a href="#profile" class="nav-item" data-view="profile">
+          <i class="fa-solid fa-user-gear"></i>
+          <span>My Profile</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button id="btn-logout" class="btn btn-logout">
+          <i class="fa-solid fa-right-from-bracket"></i>
+          <span>Sign Out</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN VIEW CONTAINER -->
+    <main class="main-content">
+      
+      <!-- TOP NAV -->
+      <header class="top-nav">
+        <div class="header-left">
+          <button id="mobile-nav-toggle" class="mobile-nav-toggle">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          
+          <!-- Breadcrumbs -->
+          <div class="breadcrumbs">
+            <span class="breadcrumb-item" id="bc-root">Team Matrix</span>
+            <i class="fa-solid fa-chevron-right separator"></i>
+            <span class="breadcrumb-item active" id="bc-current">Dashboard</span>
+          </div>
+        </div>
+
+        <div class="header-right">
+          <!-- Global Search Bar -->
+          <div class="search-bar-wrapper">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <input type="text" id="global-search-input" placeholder="Search tasks, employees, reports...">
+            <div id="search-results-dropdown" class="search-results-dropdown hidden"></div>
+          </div>
+
+          <!-- Theme Toggle -->
+          <button id="theme-toggle-btn" class="theme-toggle-btn" title="Toggle Dark/Light Mode">
+            <i class="fa-regular fa-moon"></i>
+          </button>
+
+          <!-- Notification Bell -->
+          <div class="notification-wrapper">
+            <button id="notification-bell-btn" class="notification-bell-btn">
+              <i class="fa-regular fa-bell"></i>
+              <span id="notification-badge" class="badge badge-error hidden">0</span>
+            </button>
+            
+            <div id="notification-panel" class="notification-panel hidden">
+              <div class="panel-header">
+                <h3>Notifications</h3>
+                <button id="btn-mark-all-read" class="btn-text-action">Mark all as read</button>
+              </div>
+              <div id="notifications-list" class="panel-body">
+                <div class="empty-state">
+                  <i class="fa-regular fa-bell-slash"></i>
+                  <p>No new notifications</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- User Menu Mini -->
+          <div class="top-user-menu">
+            <img id="top-user-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" alt="Avatar" class="mini-avatar">
+          </div>
+        </div>
+      </header>
+
+      <!-- DYNAMIC CONTENT VIEW -->
+      <section id="content-area" class="content-area">
+        
+        <!-- 1. MAIN ADMIN VIEW -->
+        <div id="view-main-admin-dashboard" class="view-panel hidden">
+          <div class="view-header-title">
+            <h2>Super Admin Dashboard</h2>
+            <p>Complete workspace oversight, employee registries, and system productivity analytics.</p>
+          </div>
+
+          <!-- Stats Cards Grid -->
+          <div class="stats-grid">
+            <div class="card stat-card" data-aos="fade-up" data-aos-delay="100">
+              <div class="card-body">
+                <div class="stat-icon bg-soft-blue"><i class="fa-solid fa-users-gear text-blue"></i></div>
+                <div class="stat-info">
+                  <span class="stat-label">Total Admins</span>
+                  <h3 id="ma-stat-admins" class="counter">0</h3>
+                </div>
+              </div>
+            </div>
+
+            <div class="card stat-card" data-aos="fade-up" data-aos-delay="150">
+              <div class="card-body">
+                <div class="stat-icon bg-soft-green"><i class="fa-solid fa-users text-green"></i></div>
+                <div class="stat-info">
+                  <span class="stat-label">Employees</span>
+                  <h3 id="ma-stat-employees" class="counter">0</h3>
+                </div>
+              </div>
+            </div>
+
+            <div class="card stat-card" data-aos="fade-up" data-aos-delay="200">
+              <div class="card-body">
+                <div class="stat-icon bg-soft-orange"><i class="fa-solid fa-diagram-project text-orange"></i></div>
+                <div class="stat-info">
+                  <span class="stat-label">Active Projects</span>
+                  <h3 id="ma-stat-projects" class="counter">0</h3>
+                </div>
+              </div>
+            </div>
+
+            <div class="card stat-card" data-aos="fade-up" data-aos-delay="250">
+              <div class="card-body">
+                <div class="stat-icon bg-soft-red"><i class="fa-solid fa-tasks text-red"></i></div>
+                <div class="stat-info">
+                  <span class="stat-label">Active Tasks</span>
+                  <h3 id="ma-stat-active-tasks" class="counter">0</h3>
+                </div>
+              </div>
+            </div>
+
+            <div class="card stat-card" data-aos="fade-up" data-aos-delay="300">
+              <div class="card-body">
+                <div class="stat-icon bg-soft-blue"><i class="fa-solid fa-user-clock text-blue"></i></div>
+                <div class="stat-info">
+                  <span class="stat-label">Attendance Today</span>
+                  <h3 id="ma-stat-attendance" class="counter">0</h3>
+                </div>
+              </div>
+            </div>
+
+            <div class="card stat-card" data-aos="fade-up" data-aos-delay="350">
+              <div class="card-body">
+                <div class="stat-icon bg-soft-orange"><i class="fa-regular fa-calendar-times text-orange"></i></div>
+                <div class="stat-info">
+                  <span class="stat-label">Pending Leaves</span>
+                  <h3 id="ma-stat-leaves" class="counter">0</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Charts Row -->
+          <div class="charts-row">
+            <div class="card chart-card-large" data-aos="fade-up" data-aos-delay="400">
+              <div class="card-header">
+                <h3>Daily Productivity %</h3>
+                <span class="badge badge-info">7 Days Trend</span>
+              </div>
+              <div class="card-body">
+                <div class="chart-container">
+                  <canvas id="ma-productivity-chart"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <div class="card chart-card-small" data-aos="fade-up" data-aos-delay="450">
+              <div class="card-header">
+                <h3>Task Breakdowns</h3>
+              </div>
+              <div class="card-body">
+                <div class="chart-container">
+                  <canvas id="ma-tasks-chart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="dashboard-split-row">
+            <!-- Timeline Activity -->
+            <div class="card timeline-card" data-aos="fade-up" data-aos-delay="500">
+              <div class="card-header">
+                <h3>Recent Activity Timeline</h3>
+              </div>
+              <div class="card-body">
+                <div id="ma-activity-timeline" class="timeline">
+                  <!-- Dynamic timeline content -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card quick-actions-card" data-aos="fade-up" data-aos-delay="550">
+              <div class="card-header">
+                <h3>Quick Actions</h3>
+              </div>
+              <div class="card-body quick-actions-grid">
+                <button class="btn btn-action-card" id="btn-qa-create-admin">
+                  <i class="fa-solid fa-user-plus text-blue"></i>
+                  <span>Create Admin</span>
+                </button>
+                <button class="btn btn-action-card" id="btn-qa-create-employee">
+                  <i class="fa-solid fa-user-tie text-green"></i>
+                  <span>Create Employee</span>
+                </button>
+                <button class="btn btn-action-card" id="btn-qa-assign-employee">
+                  <i class="fa-solid fa-people-arrows text-orange"></i>
+                  <span>Assign Employee</span>
+                </button>
+                <button class="btn btn-action-card" id="btn-qa-generate-report">
+                  <i class="fa-solid fa-file-arrow-down text-red"></i>
+                  <span>Generate Report</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. ADMIN VIEW -->
+        <div id="view-admin-dashboard" class="view-panel hidden">
+          <div class="view-header-title">
+            <h2>Department Admin Dashboard</h2>
+            <p>Manage your direct employees, assign tasks, review timesheets, and approve leaves.</p>
+          </div>
+
+          <!-- Quick Clock In Panel -->
+          <div class="card clock-in-panel-card" data-aos="fade-up" style="margin-bottom: 24px;">
+            <div class="card-body clock-in-layout">
+              <div class="clock-icon-wrapper">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+              </div>
+              <div class="clock-details">
+                <h3>Clock Attendance</h3>
+                <p class="clock-in-time-desc-class">Not checked in today.</p>
+              </div>
+              <div class="clock-actions">
+                <button class="btn btn-success btn-clock-in-class"><i class="fa-solid fa-right-to-bracket"></i> Check In</button>
+                <button class="btn btn-danger btn-clock-out-class" disabled><i class="fa-solid fa-right-from-bracket"></i> Check Out</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stats Grid -->
+          <div class="stats-grid grid-4-cols">
+            <div class="card stat-card" data-aos="fade-up">
+              <div class="card-body">
+                <div class="stat-icon bg-soft-green"><i class="fa-solid fa-people-group text-green"></i></div>
+                <div class="stat-info">
+                  <span class="stat-label">Employees Managed</span>
+                  <h3 id="admin-stat-employees">0</h3>
+                </div>
+              </div>
+            </div>
+
+            <div class="card stat-card" data-aos="fade-up" data-aos-delay="100">
+              <div class="card-body">
+                <div class="stat-icon bg-soft-blue"><i class="fa-solid fa-list-check text-blue"></i></div>
+                <div class="stat-info">
+                  <span class="stat-label">Active Tasks</span>
+                  <h3 id="admin-stat-tasks">0</h3>
+                </div>
+              </div>
+            </div>
+
+            <div class="card stat-card" data-aos="fade-up" data-aos-delay="200">
+              <div class="card-body">
+                <div class="stat-icon bg-soft-orange"><i class="fa-solid fa-envelope-open-text text-orange"></i></div>
+                <div class="stat-info">
+                  <span class="stat-label">Leave Requests</span>
+                  <h3 id="admin-stat-leaves">0</h3>
+                </div>
+              </div>
+            </div>
+
+            <div class="card stat-card" data-aos="fade-up" data-aos-delay="300">
+              <div class="card-body">
+                <div class="stat-icon bg-soft-red"><i class="fa-solid fa-calendar-check text-red"></i></div>
+                <div class="stat-info">
+                  <span class="stat-label">Attendance Today</span>
+                  <h3 id="admin-stat-attendance">0</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="dashboard-split-row">
+            <!-- Calendar Section -->
+            <div class="card calendar-card" data-aos="fade-up">
+              <div class="card-header">
+                <h3>Team Calendar Overview</h3>
+              </div>
+              <div class="card-body">
+                <div id="admin-team-calendar" class="calendar-wrapper">
+                  <!-- Custom rendering Calendar -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Direct Employees Quick List -->
+            <div class="card list-card" data-aos="fade-up" data-aos-delay="200">
+              <div class="card-header">
+                <h3>My Employees Directory</h3>
+                <button class="btn btn-primary btn-sm" id="btn-admin-add-employee"><i class="fa-solid fa-plus"></i> Add Employee</button>
+              </div>
+              <div class="card-body">
+                <div class="employee-avatar-list" id="admin-employees-list-container">
+                  <!-- Dynamic Employees List -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. EMPLOYEE VIEW -->
+        <div id="view-employee-dashboard" class="view-panel hidden">
+          <div class="view-header-title">
+            <h2>Employee Workspace</h2>
+            <p>Submit daily attendance, track task cards, update logs, and submit leave requests.</p>
+          </div>
+
+          <!-- Quick Clock In Panel -->
+          <div class="card clock-in-panel-card" data-aos="fade-up">
+            <div class="card-body clock-in-layout">
+              <div class="clock-icon-wrapper">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+              </div>
+              <div class="clock-details">
+                <h3>Clock Attendance</h3>
+                <p class="clock-in-time-desc-class">Not checked in today.</p>
+              </div>
+              <div class="clock-actions">
+                <button class="btn btn-success btn-clock-in-class"><i class="fa-solid fa-right-to-bracket"></i> Check In</button>
+                <button class="btn btn-danger btn-clock-out-class" disabled><i class="fa-solid fa-right-from-bracket"></i> Check Out</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cards Row -->
+          <div class="stats-grid grid-4-cols" style="margin-top: 24px;">
+            <div class="card stat-card">
+              <div class="card-body">
+                <div class="stat-icon bg-soft-blue"><i class="fa-solid fa-list-check text-blue"></i></div>
+                <div class="stat-info">
+                  <span class="stat-label">Assigned Tasks</span>
+                  <h3 id="emp-stat-assigned">0</h3>
+                </div>
+              </div>
+            </div>
+            
+            <div class="card stat-card">
+              <div class="card-body">
+                <div class="stat-icon bg-soft-orange"><i class="fa-solid fa-hourglass-half text-orange"></i></div>
+                <div class="stat-info">
+                  <span class="stat-label">Pending</span>
+                  <h3 id="emp-stat-pending">0</h3>
+                </div>
+              </div>
+            </div>
+
+            <div class="card stat-card">
+              <div class="card-body">
+                <div class="stat-icon bg-soft-green"><i class="fa-solid fa-check-double text-green"></i></div>
+                <div class="stat-info">
+                  <span class="stat-label">Completed</span>
+                  <h3 id="emp-stat-completed">0</h3>
+                </div>
+              </div>
+            </div>
+
+            <div class="card stat-card">
+              <div class="card-body">
+                <div class="stat-icon bg-soft-red"><i class="fa-solid fa-house-laptop text-red"></i></div>
+                <div class="stat-info">
+                  <span class="stat-label">Leave Balance</span>
+                  <h3>18 Days</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Leaves & Tasks Summary Grid -->
+          <div class="dashboard-split-row" style="margin-top: 24px;">
+            <div class="card leave-application-card" data-aos="fade-up">
+              <div class="card-header">
+                <h3>Apply for Leave</h3>
+              </div>
+              <div class="card-body">
+                <form id="apply-leave-form" class="form-standard">
+                  <div class="form-row-2">
+                    <div class="input-group">
+                      <label>Leave Type</label>
+                      <select id="leave-type-select" required class="form-control">
+                        <option value="Sick Leave">Sick Leave</option>
+                        <option value="Casual Leave">Casual Leave</option>
+                        <option value="Annual Leave">Annual Leave</option>
+                        <option value="Other">Other</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-row-2" style="margin-top: 15px;">
+                    <div class="input-group">
+                      <label>Start Date</label>
+                      <input type="date" id="leave-start-date" required class="form-control">
+                    </div>
+                    <div class="input-group">
+                      <label>End Date</label>
+                      <input type="date" id="leave-end-date" required class="form-control">
+                    </div>
+                  </div>
+                  <div class="input-group" style="margin-top: 15px;">
+                    <label>Reason / Remarks</label>
+                    <textarea id="leave-reason" rows="3" required class="form-control" placeholder="Provide leave details..."></textarea>
+                  </div>
+                  <button type="submit" class="btn btn-primary" style="margin-top: 15px;"><i class="fa-solid fa-paper-plane"></i> Submit Request</button>
+                </form>
+              </div>
+            </div>
+
+            <div class="card" data-aos="fade-up" data-aos-delay="200">
+              <div class="card-header">
+                <h3>Today's Schedule</h3>
+              </div>
+              <div class="card-body">
+                <div id="emp-today-schedule" class="schedule-list">
+                  <!-- Dynamic schedule items -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. TASK BOARD VIEW (KANBAN & LIST) -->
+        <div id="view-tasks" class="view-panel hidden">
+          <div class="view-header-title">
+            <div class="flex-title-action">
+              <div>
+                <h2>Task Board & Projects</h2>
+                <p>Track sprints, manage workloads, and upload project assets.</p>
+              </div>
+              <button id="btn-create-task-modal" class="btn btn-primary admin-only main-admin-only"><i class="fa-solid fa-plus"></i> New Task</button>
+            </div>
+          </div>
+
+          <!-- Filters & Board Header -->
+          <div class="board-filters-bar card">
+            <div class="filter-inputs">
+              <div class="filter-group">
+                <label>Priority</label>
+                <select id="filter-priority" class="form-control">
+                  <option value="">All Priorities</option>
+                  <option value="low">Low</option>
+                  <option value="medium">Medium</option>
+                  <option value="high">High</option>
+                </select>
+              </div>
+
+              <div class="filter-group">
+                <label>Status</label>
+                <select id="filter-status" class="form-control">
+                  <option value="">All Statuses</option>
+                  <option value="pending">Pending</option>
+                  <option value="in_progress">In Progress</option>
+                  <option value="review">Review</option>
+                  <option value="completed">Completed</option>
+                  <option value="rejected">Rejected</option>
+                  <option value="reopened">Reopened</option>
+                </select>
+              </div>
+
+              <div class="filter-group admin-only main-admin-only">
+                <label>Assigned To</label>
+                <select id="filter-assignee" class="form-control">
+                  <option value="">All Employees</option>
+                </select>
+              </div>
+
+              <div class="filter-group">
+                <label>Department</label>
+                <input type="text" id="filter-department" class="form-control" placeholder="e.g. Engineering">
+              </div>
+
+              <button id="btn-clear-filters" class="btn btn-light"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+            </div>
+            
+            <div class="board-view-toggle">
+              <button class="btn-toggle active" id="btn-toggle-kanban"><i class="fa-solid fa-grip-vertical"></i> Kanban</button>
+              <button class="btn-toggle" id="btn-toggle-list"><i class="fa-solid fa-list"></i> Table List</button>
+            </div>
+          </div>
+
+          <!-- Kanban Grid -->
+          <div id="task-kanban-board" class="kanban-board">
+            <!-- Pending -->
+            <div class="kanban-column" id="col-pending">
+              <div class="col-header">
+                <h3>Pending</h3>
+                <span class="count-badge bg-soft-orange text-orange">0</span>
+              </div>
+              <div class="kanban-cards-container" data-status="pending"></div>
+            </div>
+            <!-- In Progress -->
+            <div class="kanban-column" id="col-in_progress">
+              <div class="col-header">
+                <h3>In Progress</h3>
+                <span class="count-badge bg-soft-blue text-blue">0</span>
+              </div>
+              <div class="kanban-cards-container" data-status="in_progress"></div>
+            </div>
+            <!-- Review -->
+            <div class="kanban-column" id="col-review">
+              <div class="col-header">
+                <h3>Review</h3>
+                <span class="count-badge bg-soft-orange text-orange">0</span>
+              </div>
+              <div class="kanban-cards-container" data-status="review"></div>
+            </div>
+            <!-- Completed -->
+            <div class="kanban-column" id="col-completed">
+              <div class="col-header">
+                <h3>Completed</h3>
+                <span class="count-badge bg-soft-green text-green">0</span>
+              </div>
+              <div class="kanban-cards-container" data-status="completed"></div>
+            </div>
+          </div>
+
+          <!-- Table List View -->
+          <div id="task-list-view" class="task-list-view hidden">
+            <!-- Bulk Actions Bar -->
+            <div class="bulk-actions-bar card hidden" id="bulk-actions-bar" style="margin-bottom: 16px; padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; background: var(--color-bg-card); border: 1px solid var(--color-border);">
+              <span id="bulk-selected-text" style="font-size: 0.85rem; font-weight: 600;">0 tasks selected</span>
+              <button class="btn btn-danger btn-sm" id="btn-bulk-delete"><i class="fa-solid fa-trash-can"></i> Delete Selected</button>
+            </div>
+
+            <div class="card table-card">
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr id="task-table-header-row">
+                      <th>Task Title</th>
+                      <th>Department</th>
+                      <th>Priority</th>
+                      <th>Deadline</th>
+                      <th>Assignee</th>
+                      <th>Status</th>
+                      <th>Progress</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="task-table-body">
+                    <!-- Dynamic Table Rows -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. ATTENDANCE HISTORICAL VIEW -->
+        <div id="view-attendance" class="view-panel hidden">
+          <div class="view-header-title">
+            <h2>Attendance Calendar & History</h2>
+            <p>Consult checkout logs, calculate working hours, and track clock times.</p>
+          </div>
+
+          <!-- Attendance Filters -->
+          <div class="card attendance-filter-card" style="padding: 16px 24px; margin-bottom: 24px;">
+            <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: center;">
+              <!-- Dropdown for Admin/Super Admin only -->
+              <div class="filter-group admin-only main-admin-only" style="max-width: 300px; flex: 1; min-width: 200px; margin-bottom: 0;">
+                <label for="attendance-user-select" style="font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: var(--color-text-secondary); margin-bottom: 4px; display: block;">Select Employee/Admin</label>
+                <select id="attendance-user-select" class="form-control">
+                  <option value="">All Employees & Admins</option>
+                </select>
+              </div>
+              
+              <!-- Date Filter for everyone -->
+              <div class="filter-group" style="max-width: 260px; flex: 1; min-width: 180px; margin-bottom: 0;">
+                <label for="attendance-date-filter" style="font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: var(--color-text-secondary); margin-bottom: 4px; display: block;">Filter by Date (Default: Today)</label>
+                <div style="display: flex; gap: 8px; align-items: center;">
+                  <input type="date" id="attendance-date-filter" class="form-control" style="cursor: pointer; height: 38px;">
+                  <button id="btn-clear-attendance-date" class="btn btn-light" style="padding: 8px 12px; height: 38px;" title="Clear date filter to show all"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+              </div>
+
+              <!-- Name Search Filter -->
+              <div class="filter-group" style="max-width: 260px; flex: 1; min-width: 180px; margin-bottom: 0;">
+                <label for="attendance-name-filter" style="font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: var(--color-text-secondary); margin-bottom: 4px; display: block;">Search by Name / Role</label>
+                <input type="text" id="attendance-name-filter" class="form-control" placeholder="Type name or role to filter..." style="height: 38px;">
+              </div>
+            </div>
+          </div>
+
+          <div class="card calendar-full-card">
+            <div class="calendar-header-actions">
+              <button class="btn btn-light" id="btn-calendar-prev"><i class="fa-solid fa-chevron-left"></i></button>
+              <h3 id="calendar-month-year-label">July 2026</h3>
+              <button class="btn btn-light" id="btn-calendar-next"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+            <div class="attendance-legend">
+              <span class="legend-item"><span class="legend-dot bg-green"></span> Present</span>
+              <span class="legend-item"><span class="legend-dot bg-orange"></span> Late Entry</span>
+              <span class="legend-item"><span class="legend-dot bg-red"></span> Absent</span>
+              <span class="legend-item"><span class="legend-dot bg-blue"></span> Approved Leave</span>
+            </div>
+            <div id="attendance-calendar-grid" class="calendar-grid">
+              <!-- Calendar days -->
+            </div>
+          </div>
+
+          <!-- History Table -->
+          <div class="card table-card" style="margin-top: 24px;">
+            <div class="card-header">
+              <h3>Attendance Log Sheet</h3>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr id="attendance-table-header">
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Check In</th>
+                    <th>Check Out</th>
+                    <th>Hours Worked</th>
+                    <th>Late Entry</th>
+                  </tr>
+                </thead>
+                <tbody id="attendance-history-body">
+                  <!-- Dynamic log entries -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. LEAVES VIEW -->
+        <div id="view-leaves" class="view-panel hidden">
+          <div class="view-header-title">
+            <h2>Leave Management Portal</h2>
+            <p>Review leave applications, submit request logs, and monitor approved dates.</p>
+          </div>
+
+          <!-- Leave Log Card -->
+          <div class="card table-card">
+            <div class="card-header" style="display:flex; justify-content:space-between; align-items:center;">
+              <h3>Request Log & Approvals</h3>
+              <button class="btn btn-danger btn-sm" id="btn-bulk-delete-leaves" style="display:none;"><i class="fa-solid fa-trash-can"></i> Delete Selected</button>
+            </div>
+            <!-- Filter Options -->
+            <div class="card-filters" style="display: flex; gap: 15px; padding: 15px; border-bottom: 1px solid var(--color-border); flex-wrap: wrap; align-items: center; background-color: var(--color-bg-sidebar);">
+              <div class="leave-filter-item" style="display: flex; align-items: center; gap: 8px;">
+                <label style="margin: 0; white-space: nowrap; font-size: 0.85rem; display: inline-block; width: auto; font-weight: 500;">Start Date:</label>
+                <input type="date" id="leave-filter-start" class="form-control" style="width: 140px; display: inline-block; padding: 4px 8px; font-size: 0.85rem; margin: 0;">
+              </div>
+              <div class="leave-filter-item" style="display: flex; align-items: center; gap: 8px;">
+                <label style="margin: 0; white-space: nowrap; font-size: 0.85rem; display: inline-block; width: auto; font-weight: 500;">End Date:</label>
+                <input type="date" id="leave-filter-end" class="form-control" style="width: 140px; display: inline-block; padding: 4px 8px; font-size: 0.85rem; margin: 0;">
+              </div>
+              <div class="leave-filter-item admin-only" style="display: flex; align-items: center; gap: 8px;">
+                <label style="margin: 0; white-space: nowrap; font-size: 0.85rem; display: inline-block; width: auto; font-weight: 500;">Search Employee:</label>
+                <input type="text" id="leave-filter-name" class="form-control" placeholder="Employee name..." style="width: 160px; display: inline-block; padding: 4px 8px; font-size: 0.85rem; margin: 0;">
+              </div>
+              <button class="btn btn-secondary btn-sm" id="btn-clear-leave-filters" style="padding: 6px 12px; font-size: 0.85rem;"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th style="width: 40px;"><input type="checkbox" id="leave-select-all"></th>
+                    <th>Employee</th>
+                    <th>Department</th>
+                    <th>Leave Type</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Reason</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="leaves-table-body">
+                  <!-- Dynamic leaves -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- EXPENSES VIEW -->
+        <div id="view-expenses" class="view-panel hidden">
+          <div class="view-header-title">
+            <h2>Expense Management Tracker</h2>
+            <p>Track business expenditures, record company receipts, and manage cost logs.</p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 24px;">
+            <!-- Add Expense Form Card (Top) -->
+            <div class="card">
+              <div class="card-header">
+                <h3>Add New Expense</h3>
+              </div>
+              <div class="card-body">
+                <form id="add-expense-form" class="form-standard">
+                  <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 15px;">
+                    <div class="input-group">
+                      <label>Expense Title</label>
+                      <input type="text" id="expense-title" required class="form-control" placeholder="e.g. Office Stationery, Client Lunch">
+                    </div>
+                    <div class="input-group">
+                      <label>Amount (INR)</label>
+                      <input type="number" id="expense-amount" min="1" step="0.01" required class="form-control" placeholder="0.00">
+                    </div>
+                    <div class="input-group">
+                      <label>Category</label>
+                      <select id="expense-category" required class="form-control">
+                        <option value="Office Supplies">Office Supplies</option>
+                        <option value="Travel">Travel</option>
+                        <option value="Meals & Entertainment">Meals & Entertainment</option>
+                        <option value="Equipment">Equipment</option>
+                        <option value="Software/SaaS">Software/SaaS</option>
+                        <option value="Utilities">Utilities</option>
+                        <option value="Other">Other</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div style="display: grid; grid-template-columns: 1fr 1fr 2fr; gap: 15px; margin-top: 15px;">
+                    <div class="input-group">
+                      <label>Date</label>
+                      <input type="date" id="expense-date" required class="form-control">
+                    </div>
+                    <div class="input-group">
+                      <label>Day</label>
+                      <input type="text" id="expense-day" readonly class="form-control" style="background-color: var(--color-bg-main);" placeholder="Auto-calculated">
+                    </div>
+                    <div class="input-group">
+                      <label>Description / Details</label>
+                      <input type="text" id="expense-desc" class="form-control" placeholder="Provide extra description details (optional)...">
+                    </div>
+                  </div>
+                  <div style="display: flex; justify-content: flex-end; margin-top: 15px;">
+                    <button type="submit" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Record Expense</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <!-- Expense Log Table Card (Bottom) -->
+            <div class="card table-card" style="margin-top: 0;">
+              <div class="card-header" style="display:flex; justify-content:space-between; align-items:center;">
+                <h3>Expense Log</h3>
+                <button class="btn btn-danger btn-sm" id="btn-bulk-delete-expenses" style="display:none;"><i class="fa-solid fa-trash-can"></i> Delete Selected</button>
+              </div>
+              
+              <!-- Filter Options & Total Display -->
+              <div class="card-filters" style="display: flex; gap: 15px; padding: 15px; border-bottom: 1px solid var(--color-border); flex-wrap: wrap; align-items: center; background-color: var(--color-bg-sidebar);">
+                <div class="expense-filter-item" style="display: flex; align-items: center; gap: 8px;">
+                  <label style="margin: 0; white-space: nowrap; font-size: 0.85rem; display: inline-block; width: auto; font-weight: 500;">Start Date:</label>
+                  <input type="date" id="expense-filter-start" class="form-control" style="width: 140px; display: inline-block; padding: 4px 8px; font-size: 0.85rem; margin: 0;">
+                </div>
+                <div class="expense-filter-item" style="display: flex; align-items: center; gap: 8px;">
+                  <label style="margin: 0; white-space: nowrap; font-size: 0.85rem; display: inline-block; width: auto; font-weight: 500;">End Date:</label>
+                  <input type="date" id="expense-filter-end" class="form-control" style="width: 140px; display: inline-block; padding: 4px 8px; font-size: 0.85rem; margin: 0;">
+                </div>
+                <div class="expense-filter-item admin-only" style="display: flex; align-items: center; gap: 8px;">
+                  <label style="margin: 0; white-space: nowrap; font-size: 0.85rem; display: inline-block; width: auto; font-weight: 500;">Search Employee:</label>
+                  <input type="text" id="expense-filter-name" class="form-control" placeholder="Employee name..." style="width: 160px; display: inline-block; padding: 4px 8px; font-size: 0.85rem; margin: 0;">
+                </div>
+                <button class="btn btn-secondary btn-sm" id="btn-clear-expense-filters" style="padding: 6px 12px; font-size: 0.85rem;"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+                
+                <div style="margin-left: auto; display: flex; align-items: center; gap: 10px;">
+                  <div id="expense-total-display" style="font-size: 1rem; font-weight: bold; background: var(--color-bg-main); padding: 8px 16px; border-radius: 6px; border: 1px dashed var(--color-border); color: var(--color-text-main);">
+                    Total Expense: <span id="expense-total-val" class="text-green" style="font-weight: 800;">₹0.00</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th style="width: 40px;"><input type="checkbox" id="expense-select-all"></th>
+                      <th class="admin-only">Employee</th>
+                      <th>Title</th>
+                      <th>Amount</th>
+                      <th>Category</th>
+                      <th>Date & Day</th>
+                      <th>Description</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="expenses-table-body">
+                    <!-- Dynamic expenses -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 7. REPORTS VIEW -->
+        <div id="view-reports" class="view-panel hidden">
+          <div class="view-header-title">
+            <h2>Reports, Export, & Workspace Analytics</h2>
+            <p>Generate certified Excel spreadsheets and CSV reports for departments, employees, or tasks.</p>
+          </div>
+
+          <div class="reports-generation-grid">
+            <!-- Card Report 1 -->
+            <div class="card report-gen-card">
+              <div class="card-body">
+                <div class="report-icon"><i class="fa-solid fa-calendar-check text-green"></i></div>
+                <h3>Attendance Report</h3>
+                <p>Generates detailed check-in times, late entries, and calculated total hours.</p>
+                <div class="form-standard">
+                  <div class="input-group">
+                    <label>Start Date</label>
+                    <input type="date" id="report-att-start" class="form-control">
+                  </div>
+                  <div class="input-group" style="margin-top: 10px;">
+                    <label>End Date</label>
+                    <input type="date" id="report-att-end" class="form-control">
+                  </div>
+                </div>
+                <button class="btn btn-primary btn-block" style="margin-top: 15px;" id="btn-export-attendance">
+                  <i class="fa-solid fa-file-csv"></i> Download CSV Sheet
+                </button>
+              </div>
+            </div>
+
+            <!-- Card Report 2 -->
+            <div class="card report-gen-card">
+              <div class="card-body">
+                <div class="report-icon"><i class="fa-solid fa-list-check text-blue"></i></div>
+                <h3>Tasks & Sprints</h3>
+                <p>Generates task backlogs, current progress percentages, and assignee detail documents.</p>
+                <div class="form-standard">
+                  <div class="input-group">
+                    <label>Task Priority</label>
+                    <select id="report-task-priority" class="form-control">
+                      <option value="">All Priorities</option>
+                      <option value="low">Low</option>
+                      <option value="medium">Medium</option>
+                      <option value="high">High</option>
+                    </select>
+                  </div>
+                  <div class="input-group" style="margin-top: 10px;">
+                    <label>Task Status</label>
+                    <select id="report-task-status" class="form-control">
+                      <option value="">All Statuses</option>
+                      <option value="pending">Pending</option>
+                      <option value="in_progress">In Progress</option>
+                      <option value="review">Review</option>
+                      <option value="completed">Completed</option>
+                    </select>
+                  </div>
+                </div>
+                <button class="btn btn-primary btn-block" style="margin-top: 15px;" id="btn-export-tasks">
+                  <i class="fa-solid fa-file-csv"></i> Download CSV Sheet
+                </button>
+              </div>
+            </div>
+
+            <!-- Card Report 3 -->
+            <div class="card report-gen-card">
+              <div class="card-body">
+                <div class="report-icon"><i class="fa-solid fa-chart-line text-orange"></i></div>
+                <h3>Performance Analytics</h3>
+                <p>Generates department average completion ratios, performance scores, and late-clock statistics.</p>
+                <p class="description-sub text-muted">Weekly, monthly, and overall department metrics.</p>
+                <button class="btn btn-primary btn-block" style="margin-top: 73px;" id="btn-export-performance">
+                  <i class="fa-solid fa-file-csv"></i> Download Performance CSV
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 8. DIRECTORY SETUP (Main Admin only) -->
+        <div id="view-directory" class="view-panel hidden">
+          <div class="view-header-title">
+            <h2>Workspace Setup & Directories</h2>
+            <p>Configure company structure, allocate admins, create employees, and design department hierarchies.</p>
+          </div>
+
+          <!-- Admins & Employees lists -->
+          <div class="dashboard-split-row">
+            <div class="card">
+              <div class="card-header" style="display:flex; justify-content:space-between; align-items:center;">
+                <h3>Admin Accounts</h3>
+                <div style="display:flex; gap:8px;">
+                  <button class="btn btn-danger btn-sm" id="btn-bulk-delete-admins" style="display:none;"><i class="fa-solid fa-trash-can"></i> Delete Selected</button>
+                  <button class="btn btn-primary btn-sm" id="btn-dir-create-admin"><i class="fa-solid fa-plus"></i> New Admin</button>
+                </div>
+              </div>
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th style="width: 40px;"><input type="checkbox" id="admin-select-all"></th>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Department</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="dir-admins-table-body">
+                    <!-- Dynamic Admins list -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header" style="display:flex; justify-content:space-between; align-items:center;">
+                <h3>Employee Directory</h3>
+                <div style="display:flex; gap:8px;">
+                  <button class="btn btn-danger btn-sm" id="btn-bulk-delete-employees" style="display:none;"><i class="fa-solid fa-trash-can"></i> Delete Selected</button>
+                  <button class="btn btn-primary btn-sm" id="btn-dir-create-employee"><i class="fa-solid fa-plus"></i> New Employee</button>
+                </div>
+              </div>
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th style="width: 40px;"><input type="checkbox" id="employee-select-all"></th>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Department</th>
+                      <th>Managed By</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="dir-employees-table-body">
+                    <!-- Dynamic Employees list -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 9. PROFILE VIEW -->
+        <div id="view-profile" class="view-panel hidden">
+          <div class="view-header-title">
+            <h2>My Profile & Security Settings</h2>
+            <p>Modify avatar photos, update personal information, update security settings, and configure passwords.</p>
+          </div>
+
+          <div class="profile-settings-layout">
+            <!-- Left Card: Avatar Upload and details -->
+            <div class="card profile-avatar-card">
+              <div class="card-body">
+                <div class="profile-avatar-wrapper">
+                  <img id="profile-picture-large" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" alt="Avatar" class="avatar-large">
+                  <label for="avatar-file-input" class="btn-avatar-upload">
+                    <i class="fa-solid fa-camera"></i>
+                  </label>
+                  <input type="file" id="avatar-file-input" class="hidden" accept="image/*">
+                </div>
+                <h3 id="profile-details-name">Alex Johnson</h3>
+                <p id="profile-details-email">alex@company.com</p>
+                <div class="profile-badge-role" id="profile-details-role">Lead Engineer</div>
+              </div>
+            </div>
+
+            <!-- Right Column: Settings tabs/forms -->
+            <div class="profile-forms-column">
+              <!-- Form 1: Details -->
+              <div class="card">
+                <div class="card-header"><h3>Personal Information</h3></div>
+                <div class="card-body">
+                  <form id="profile-info-form" class="form-standard">
+                    <div class="input-group">
+                      <label>Full Name</label>
+                      <input type="text" id="profile-name-input" required class="form-control">
+                    </div>
+                    <div class="input-group" style="margin-top: 15px;">
+                      <label>Email Address</label>
+                      <input type="email" id="profile-email-input" required class="form-control" disabled>
+                    </div>
+                    <div class="input-group" style="margin-top: 15px;">
+                      <label>Department</label>
+                      <select id="profile-dept-input" class="form-control">
+                        <option value="Web Development">Web Development</option>
+                        <option value="Digital Marketing">Digital Marketing</option>
+                        <option value="Executive">Executive</option>
+                        <option value="Development Dept">Development Dept</option>
+                        <option value="Creative Design">Creative Design</option>
+                        <option value="Engineering">Engineering</option>
+                        <option value="QA & Testing">QA & Testing</option>
+                        <option value="UI/UX Design">UI/UX Design</option>
+                        <option value="Branding & Copy">Branding & Copy</option>
+                        <option value="Product Marketing">Product Marketing</option>
+                      </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="margin-top: 15px;">Save Changes</button>
+                  </form>
+                </div>
+              </div>
+
+              <!-- Form 2: Password Change -->
+              <div class="card" style="margin-top: 24px;">
+                <div class="card-header"><h3>Security Settings</h3></div>
+                <div class="card-body">
+                  <form id="profile-security-form" class="form-standard">
+                    <div class="input-group">
+                      <label>Current Password</label>
+                      <input type="password" id="profile-curr-password" required class="form-control" placeholder="••••••••">
+                    </div>
+                    <div class="input-group" style="margin-top: 15px;">
+                      <label>New Password</label>
+                      <input type="password" id="profile-new-password" required class="form-control" placeholder="••••••••">
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="margin-top: 15px;">Update Password</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+    </main>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODALS CONTAINER -->
+  <!-- ============================================== -->
+
+  <!-- 1. CREATE ADMIN MODAL -->
+  <div class="modal-backdrop hidden" id="modal-create-admin">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>Create Administrator</h3>
+        <button class="btn-close-modal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <form id="form-create-admin" class="form-standard">
+          <div class="input-group">
+            <label>Name</label>
+            <input type="text" id="admin-new-name" required placeholder="e.g. John Admin" class="form-control">
+          </div>
+          <div class="input-group" style="margin-top: 15px;">
+            <label>Email</label>
+            <input type="email" id="admin-new-email" required placeholder="name@company.com" class="form-control">
+          </div>
+          <div class="input-group" style="margin-top: 15px;">
+            <label>Password</label>
+            <input type="password" id="admin-new-password" required placeholder="••••••••" class="form-control">
+          </div>
+          <div class="input-group" style="margin-top: 15px;">
+            <label>Department</label>
+            <select id="admin-new-dept" class="form-control">
+              <option value="Web Development">Web Development</option>
+              <option value="Digital Marketing">Digital Marketing</option>
+              <option value="Executive">Executive</option>
+              <option value="Development Dept">Development Dept</option>
+              <option value="Creative Design">Creative Design</option>
+              <option value="Engineering">Engineering</option>
+              <option value="QA & Testing">QA & Testing</option>
+              <option value="UI/UX Design">UI/UX Design</option>
+              <option value="Branding & Copy">Branding & Copy</option>
+              <option value="Product Marketing">Product Marketing</option>
+            </select>
+          </div>
+          <div class="modal-footer" style="margin-top: 20px;">
+            <button type="button" class="btn btn-light btn-close-modal">Cancel</button>
+            <button type="submit" class="btn btn-primary">Create Account</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. CREATE EMPLOYEE MODAL -->
+  <div class="modal-backdrop hidden" id="modal-create-employee">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>Create Employee Account</h3>
+        <button class="btn-close-modal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <form id="form-create-employee" class="form-standard">
+          <div class="input-group">
+            <label>Name</label>
+            <input type="text" id="employee-new-name" required placeholder="e.g. Clark Employee" class="form-control">
+          </div>
+          <div class="input-group" style="margin-top: 15px;">
+            <label>Email</label>
+            <input type="email" id="employee-new-email" required placeholder="name@company.com" class="form-control">
+          </div>
+          <div class="input-group" style="margin-top: 15px;">
+            <label>Password</label>
+            <input type="password" id="employee-new-password" required placeholder="••••••••" class="form-control">
+          </div>
+          <div class="input-group" style="margin-top: 15px;">
+            <label>Department</label>
+            <select id="employee-new-dept" class="form-control">
+              <option value="Web Development">Web Development</option>
+              <option value="Digital Marketing">Digital Marketing</option>
+              <option value="Executive">Executive</option>
+              <option value="Development Dept">Development Dept</option>
+              <option value="Creative Design">Creative Design</option>
+              <option value="Engineering">Engineering</option>
+              <option value="QA & Testing">QA & Testing</option>
+              <option value="UI/UX Design">UI/UX Design</option>
+              <option value="Branding & Copy">Branding & Copy</option>
+              <option value="Product Marketing">Product Marketing</option>
+            </select>
+          </div>
+          <div class="input-group main-admin-only" style="margin-top: 15px;">
+            <label>Managing Admin</label>
+            <select id="employee-new-admin-select" class="form-control">
+              <!-- Dynamically populated -->
+            </select>
+          </div>
+          <div class="modal-footer" style="margin-top: 20px;">
+            <button type="button" class="btn btn-light btn-close-modal">Cancel</button>
+            <button type="submit" class="btn btn-primary">Create Account</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. ASSIGN EMPLOYEE MODAL -->
+  <div class="modal-backdrop hidden" id="modal-assign-employee">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>Assign Employee Management</h3>
+        <button class="btn-close-modal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <form id="form-assign-employee" class="form-standard">
+          <div class="input-group">
+            <label>Select Employee</label>
+            <select id="assign-employee-select" required class="form-control">
+              <!-- Dynamically populated -->
+            </select>
+          </div>
+          <div class="input-group" style="margin-top: 15px;">
+            <label>Assign to Admin</label>
+            <select id="assign-admin-select" required class="form-control">
+              <!-- Dynamically populated -->
+            </select>
+          </div>
+          <div class="modal-footer" style="margin-top: 20px;">
+            <button type="button" class="btn btn-light btn-close-modal">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Assignment</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. CREATE TASK MODAL -->
+  <div class="modal-backdrop hidden" id="modal-create-task">
+    <div class="modal-box modal-box-large">
+      <div class="modal-header">
+        <h3>Create Project Task</h3>
+        <button class="btn-close-modal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <form id="form-create-task" class="form-standard" enctype="multipart/form-data">
+          <div class="input-group">
+            <label>Task Title</label>
+            <input type="text" id="task-new-title" required placeholder="e.g. Implement Oauth authentication" class="form-control">
+          </div>
+          <div class="input-group" style="margin-top: 15px;">
+            <label>Description</label>
+            <textarea id="task-new-desc" rows="4" required placeholder="Detail the task description, acceptance criteria..." class="form-control"></textarea>
+          </div>
+          <div class="form-row-2" style="margin-top: 15px;">
+            <div class="input-group">
+              <label>Priority</label>
+              <select id="task-new-priority" class="form-control">
+                <option value="low">Low</option>
+                <option value="medium" selected>Medium</option>
+                <option value="high">High</option>
+              </select>
+            </div>
+            <div class="input-group">
+              <label>Department</label>
+              <select id="task-new-dept" class="form-control">
+                <option value="Web Development">Web Development</option>
+                <option value="Digital Marketing">Digital Marketing</option>
+                <option value="Executive">Executive</option>
+                <option value="Development Dept">Development Dept</option>
+                <option value="Creative Design">Creative Design</option>
+                <option value="Engineering">Engineering</option>
+                <option value="QA & Testing">QA & Testing</option>
+                <option value="UI/UX Design">UI/UX Design</option>
+                <option value="Branding & Copy">Branding & Copy</option>
+                <option value="Product Marketing">Product Marketing</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row-2" style="margin-top: 15px;">
+            <div class="input-group">
+              <label>Deadline</label>
+              <input type="date" id="task-new-deadline" required class="form-control">
+            </div>
+            <div class="input-group">
+              <label>Assigned To</label>
+              <select id="task-new-assignee" required class="form-control">
+                <!-- Dynamically populated -->
+              </select>
+            </div>
+          </div>
+          <div class="input-group" style="margin-top: 15px;">
+            <label>Attachments</label>
+            <input type="file" id="task-new-files" class="form-control" multiple>
+          </div>
+          <div class="modal-footer" style="margin-top: 20px;">
+            <button type="button" class="btn btn-light btn-close-modal">Cancel</button>
+            <button type="submit" class="btn btn-primary">Create Task</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. TASK DETAIL / EDIT / COMMENT MODAL -->
+  <div class="modal-backdrop hidden" id="modal-task-detail">
+    <div class="modal-box modal-box-large">
+      <div class="modal-header">
+        <h3 id="task-detail-title">Task details</h3>
+        <button class="btn-close-modal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body task-detail-layout">
+        <!-- Left Side: Task Info & Comments -->
+        <div class="task-detail-left">
+          <div class="task-info-section">
+            <span class="badge" id="task-detail-badge-priority">Medium</span>
+            <span class="badge" id="task-detail-badge-status">In Progress</span>
+            <p id="task-detail-desc" style="margin-top: 15px; color: var(--color-text-secondary); line-height: 1.6;"></p>
+          </div>
+
+          <!-- Attachments list -->
+          <div class="task-attachments-section" style="margin-top: 25px;">
+            <h4>Attachments</h4>
+            <div id="task-detail-attachments-list" class="attachments-list">
+              <!-- Dynamically populated files -->
+            </div>
+            <div class="file-uploader-box" style="margin-top: 10px;">
+              <label for="task-detail-file-input" class="btn btn-light btn-sm"><i class="fa-solid fa-paperclip"></i> Upload file</label>
+              <input type="file" id="task-detail-file-input" class="hidden" multiple>
+            </div>
+          </div>
+
+          <!-- Comments Thread -->
+          <div class="task-comments-section" style="margin-top: 30px;">
+            <h4>Discussion & Comments</h4>
+            <div id="task-comments-list" class="comments-list">
+              <!-- Dynamically populated comments -->
+            </div>
+            <form id="task-comment-form" class="comment-input-row" style="margin-top: 15px;">
+              <input type="text" id="task-comment-input" required class="form-control" placeholder="Add a comment or file update...">
+              <button type="submit" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i></button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Right Side: Status Updates & Logs -->
+        <div class="task-detail-right">
+          <!-- Update forms -->
+          <div class="card-inline-status">
+            <h4>Update Status</h4>
+            <div class="input-group">
+              <label>Status</label>
+              <select id="task-detail-status-select" class="form-control">
+                <option value="pending">Pending</option>
+                <option value="in_progress">In Progress</option>
+                <option value="review">Review</option>
+                <option value="completed">Completed</option>
+                <option value="rejected">Rejected</option>
+                <option value="reopened">Reopened</option>
+              </select>
+            </div>
+            <div class="input-group" style="margin-top: 15px;">
+              <label>Progress: <span id="task-detail-progress-label">0%</span></label>
+              <input type="range" id="task-detail-progress-slider" min="0" max="100" step="5" class="slider-control">
+            </div>
+            <button id="btn-task-detail-save-status" class="btn btn-primary btn-block" style="margin-top: 15px;">Save Updates</button>
+            
+            <button id="btn-task-detail-delete" class="btn btn-danger btn-block admin-only main-admin-only" style="margin-top: 10px;">
+              <i class="fa-solid fa-trash"></i> Delete Task
+            </button>
+          </div>
+
+          <div class="task-metadata-card" style="margin-top: 20px;">
+            <h4>Information</h4>
+            <p><strong>Department:</strong> <span id="task-detail-dept">Engineering</span></p>
+            <p><strong>Assigned By:</strong> <span id="task-detail-by">John Admin</span></p>
+            <p><strong>Assigned To:</strong> <span id="task-detail-to">Alex Employee</span></p>
+            <p><strong>Deadline:</strong> <span id="task-detail-deadline">July 31, 2026</span></p>
+          </div>
+
+          <div class="task-activity-card" style="margin-top: 20px;">
+            <h4>Activity History</h4>
+            <div id="task-detail-activity-history" class="activity-history-list">
+              <!-- Dynamic activity -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. ATTENDANCE CHECK-IN MODAL -->
+  <div class="modal-backdrop hidden" id="modal-attendance-checkin">
+    <div class="modal-box" style="max-width: 500px;">
+      <div class="modal-header">
+        <h3>Verify Identity & Location</h3>
+        <button class="btn-close-modal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body" style="display: flex; flex-direction: column; gap: 15px;">
+        <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin: 0;">Please capture a selfie and allow GPS access to verify your check-in.</p>
+        
+        <div style="position: relative; width: 100%; border-radius: 8px; overflow: hidden; background: #000; height: 280px; display: flex; align-items: center; justify-content: center;">
+          <video id="attendance-video" autoplay playsinline style="width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1);"></video>
+          <img id="attendance-photo-preview" class="hidden" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 8px;" />
+          
+          <!-- Biometric Face Scanning Overlay -->
+          <div id="face-scanner-overlay" style="position: absolute; inset: 0; pointer-events: none; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+            <div class="scanner-line" style="position: absolute; width: 100%; height: 3px; background: linear-gradient(90deg, transparent, #3b82f6, transparent); top: 0; left: 0; animation: scan-anim 2.5s linear infinite; box-shadow: 0 0 8px rgba(59, 130, 246, 0.8);"></div>
+            <div style="width: 170px; height: 170px; border-radius: 50%; border: 2px dashed rgba(59, 130, 246, 0.6); position: relative; box-shadow: 0 0 0 9999px rgba(15, 23, 42, 0.45); display: flex; align-items: center; justify-content: center;">
+              <div style="position: absolute; width: 20px; height: 20px; border-top: 3px solid #3b82f6; border-left: 3px solid #3b82f6; top: -5px; left: -5px;"></div>
+              <div style="position: absolute; width: 20px; height: 20px; border-top: 3px solid #3b82f6; border-right: 3px solid #3b82f6; top: -5px; right: -5px;"></div>
+              <div style="position: absolute; width: 20px; height: 20px; border-bottom: 3px solid #3b82f6; border-left: 3px solid #3b82f6; bottom: -5px; left: -5px;"></div>
+              <div style="position: absolute; width: 20px; height: 20px; border-bottom: 3px solid #3b82f6; border-right: 3px solid #3b82f6; bottom: -5px; right: -5px;"></div>
+              <span style="font-size: 0.65rem; color: rgba(255, 255, 255, 0.8); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; background: rgba(15, 23, 42, 0.7); padding: 2px 6px; border-radius: 4px;">Position Face Here</span>
+            </div>
+          </div>
+
+          <div id="camera-loading-placeholder" style="position: absolute; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: #fff; z-index: 10;">
+            <i class="fa-solid fa-spinner fa-spin" style="font-size: 2rem;"></i>
+            <span style="font-size: 0.8rem;">Initializing camera feed...</span>
+          </div>
+        </div>
+        
+        <canvas id="attendance-canvas" class="hidden" width="640" height="480"></canvas>
+
+        <div style="display: flex; gap: 10px; width: 100%;">
+          <button type="button" id="btn-capture-selfie" class="btn btn-primary" style="flex: 1;"><i class="fa-solid fa-camera"></i> Capture Selfie</button>
+          <button type="button" id="btn-retake-selfie" class="btn btn-light hidden" style="flex: 1;"><i class="fa-solid fa-rotate-left"></i> Retake Photo</button>
+        </div>
+
+        <!-- Biometric Face Verification Status -->
+        <div id="attendance-face-status" style="padding: 12px; border-radius: 6px; background: var(--color-bg-body); border: 1px solid var(--color-border); font-size: 0.8rem; display: flex; align-items: center; gap: 10px;">
+          <i class="fa-solid fa-user-shield text-warning" id="face-status-icon"></i>
+          <span id="face-status-text">Ready for Face Detection Scan...</span>
+        </div>
+
+        <!-- Biometric Simulation Selector for Developers/Admins -->
+        <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(245, 158, 11, 0.05); padding: 8px 12px; border-radius: 6px; border: 1px dashed rgba(245, 158, 11, 0.2); font-size: 0.75rem;">
+          <span style="color: var(--color-warning); font-weight: 500;"><i class="fa-solid fa-flask"></i> Testing Tool: Biometric Verification</span>
+          <select id="biometric-test-mode" style="background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: 4px; padding: 2px 6px; font-size: 0.7rem; color: var(--color-text-primary); cursor: pointer; outline: none;">
+            <option value="auto">Automatic (Real Face-API)</option>
+            <option value="force_match">Force Biometric Match (Pass)</option>
+            <option value="force_mismatch">Force Biometric Mismatch (Fail)</option>
+          </select>
+        </div>
+
+        <div id="attendance-gps-status" style="padding: 12px; border-radius: 6px; background: var(--color-bg-body); border: 1px solid var(--color-border); font-size: 0.8rem; display: flex; align-items: center; gap: 10px;">
+          <i class="fa-solid fa-spinner fa-spin text-blue" id="gps-status-icon"></i>
+          <span id="gps-status-text">Detecting GPS location...</span>
+        </div>
+
+        <div class="modal-footer" style="margin-top: 5px; padding: 0; display: flex; flex-direction: column; gap: 8px; border: none;">
+          <button type="button" id="btn-confirm-checkin" class="btn btn-success btn-block" disabled><i class="fa-solid fa-circle-check"></i> Confirm Check In</button>
+          <button type="button" class="btn btn-light btn-block btn-close-modal">Cancel Check In</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. SELFIE VIEWER MODAL -->
+  <div class="modal-backdrop hidden" id="modal-selfie-viewer">
+    <div class="modal-box" style="max-width: 450px; text-align: center;">
+      <div class="modal-header">
+        <h3>Selfie Proof</h3>
+        <button class="btn-close-modal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body" style="padding: 10px 0 0 0;">
+        <img id="selfie-viewer-img" src="" style="width: 100%; border-radius: 8px; border: 1px solid var(--color-border); display: block;" />
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ============================================== -->
+  <!-- EXTERNAL SCRIPTS -->
+  <!-- ============================================== -->
+  
+  <!-- GSAP Animation Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  
+  <!-- AOS Animation Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  
+  <!-- Chart.js Library -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <!-- Lucide Icons -->
+  <script src="https://cdn.jsdelivr.net/npm/lucide@latest"></script>
+
+  <!-- face-api.js for browser-based face detection & verification -->
+  <script src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api/dist/face-api.js"></script>
+  
+  <!-- Custom JS Modules -->
+  <script src="/js/api.js?v=3" type="module"></script>
+  <script src="/js/app.js?v=3" type="module"></script>
+  
+  <style>
+    @keyframes scan-anim {
+      0% { top: 0%; opacity: 0.3; }
+      50% { top: 96%; opacity: 1; }
+      100% { top: 0%; opacity: 0.3; }
+    }
+  </style>
+</body>
+</html>
